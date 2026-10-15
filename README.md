@@ -1,9 +1,9 @@
 # Jarkom-Modul-3-2026-K-23
 
-| Nama                | NRP        | Bagian                                  |
-| ------------------- | ---------- | --------------------------------------- |
-| Naoval James Osamah | 5027251092 | Orang B: soal 10–20                     |
-| Rizki               | —          | Orang A: soal 1–9                       |
+| Nama                | NRP        |
+| ------------------- | ---------- | 
+| Naoval James Osamah | 5027251092 |
+| Rizki               | 5027251095 |
 
 Prefix IP kelompok: **10.75**. Domain: **jujutsu.k23.com**.
 
