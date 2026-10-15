@@ -1,0 +1,6 @@
+auto eth0
+iface eth0 inet static
+    address 10.75.1.4
+    netmask 255.255.255.0
+    gateway 10.75.1.1
+    hwaddress ether 02:42:0a:4b:01:04
