@@ -7,6 +7,18 @@
 
 Prefix IP kelompok: **10.75**. Domain: **jujutsu.k23.com**.
 
+## Topologi
+
+![Topologi](topologi.png)
+
+| Network | Subnet | Gateway (jichi) | Isi |
+| --- | --- | --- | --- |
+| NAT | DHCP | eth0 | akses internet |
+| Network 1 (DMZ) | 10.75.1.0/24 | eth1 — 10.75.1.1 | utahime, shoko, gojo |
+| Network 2 (Divisi A) | 10.75.2.0/24 | eth2 — 10.75.2.1 | itadori, fushiguro, zenin, okkotsu |
+| Network 3 (Divisi B) | 10.75.3.0/24 | eth3 — 10.75.3.1 | ino, kusakabe, miwa, kugisaki |
+| Network 4 (Data Center) | 10.75.4.0/24 | eth4 — 10.75.4.1 | tengen, geto, maki, panda, nanami, todo, kirara, yaga, inumaki |
+
 ## Ringkasan Node Infrastruktur
 
 | Node    | Peran                       | Network | IP         | Gateway   |
