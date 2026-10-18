@@ -178,7 +178,7 @@ jichi menjangkau seluruh host infrastruktur di Network 1 dan 4 serta internet,
 dan host infrastruktur dapat menjangkau gateway masing-masing serta `8.8.8.8`
 melalui NAT jichi.
 
-## Soal 2 — DHCP Server tengen
+## Soal 2 - DHCP Server tengen
 
 ### Deskripsi
 
