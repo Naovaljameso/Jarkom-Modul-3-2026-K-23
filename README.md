@@ -3,7 +3,7 @@
 | Nama                | NRP        |
 | ------------------- | ---------- | 
 | Naoval James Osamah | 5027251092 |
-| Rizki               | 5027251095 |
+| Nur Rizki Syahbana  | 5027251095 |
 
 Prefix IP kelompok: **10.75**. Domain: **jujutsu.k23.com**.
 
