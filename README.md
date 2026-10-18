@@ -1,7 +1,7 @@
 # Jarkom-Modul-3-2026-K-23
 
 | Nama                | NRP        |
-| ------------------- | ---------- | 
+| ------------------- | ---------- |
 | Naoval James Osamah | 5027251092 |
 | Nur Rizki Syahbana  | 5027251095 |
 
@@ -160,13 +160,12 @@ iface eth0 inet static
 
 ### Pengujian
 
-Skrip [soal-1/script/jichi/test-soal1.sh](soal-1/script/jichi/test-soal1.sh) di
-jichi melakukan ping ke seluruh host infrastruktur dan ke internet. Host yang
-memerlukan internet untuk instalasi paket menguji gateway dan `8.8.8.8`.
+Host yang memerlukan internet untuk instalasi paket menguji gateway dan `8.8.8.8`.
+Skrip [soal-1/script/jichi/test-soal1.sh](soal-1/script/jichi/test-soal1.sh) dapat
+dipakai di jichi untuk ping ke seluruh host infrastruktur sekaligus.
 
 | Pengujian                              | Bukti                                         |
 | -------------------------------------- | --------------------------------------------- |
-| jichi → seluruh host dan internet      | ![test](soal-1/images/soal1-test-jichi.png)   |
 | jichi → gateway & internet             | ![jichi](soal-1/images/no1-jichi.png)         |
 | tengen → gateway & internet            | ![tengen](soal-1/images/no1-tengen.png)       |
 | yaga → gateway & internet              | ![yaga](soal-1/images/no1-yaga.png)           |
@@ -174,9 +173,13 @@ memerlukan internet untuk instalasi paket menguji gateway dan `8.8.8.8`.
 
 ### Kesimpulan
 
-jichi menjangkau seluruh host infrastruktur di Network 1 dan 4 serta internet,
-dan host infrastruktur dapat menjangkau gateway masing-masing serta `8.8.8.8`
-melalui NAT jichi.
+jichi dapat menjangkau gateway-nya sendiri dan internet (`8.8.8.8`, 0% packet
+loss). Screenshot tengen, yaga, dan inumaki menunjukkan *Destination Host
+Unreachable*, karena diambil sebelum NAT dan interface jichi aktif setelah restart;
+screenshot ketiga host tersebut akan diperbarui. Konektivitas tengen, yaga, dan
+inumaki ke gateway dan internet dibuktikan secara tidak langsung oleh soal 10
+(tengen memasang paket DHCP dari internet) dan soal 13 (yaga dan inumaki memasang
+MariaDB serta saling bereplikasi).
 
 ## Soal 2 - DHCP Server tengen
 
@@ -312,14 +315,13 @@ pool { allow members of "pool2"; range 10.75.2.70 10.75.2.95; }
 | Client    | Pool   | Bukti                                       |
 | --------- | ------ | ------------------------------------------- |
 | itadori   | Pool 1 | ![itadori](soal-4/images/no4-itadori.png)   |
-| fushiguro | Pool 1 | ![fushiguro](soal-4/images/no4-fushiguro.png) |
 | zenin     | Pool 2 | ![zenin](soal-4/images/no4-zenin.png)       |
-| okkotsu   | Pool 2 | ![okkotsu](soal-4/images/no4-okkotsu.png)   |
 
 ### Kesimpulan
 
-itadori dan fushiguro mendapat alamat di 10.75.2.10–.35, sedangkan zenin dan okkotsu
-di 10.75.2.70–.95, sesuai pembagian pool.
+itadori mendapat alamat di Pool 1 (10.75.2.10–.35) dan zenin di Pool 2
+(10.75.2.70–.95). fushiguro (10.75.2.11) dan okkotsu (10.75.2.71) dibuktikan pada
+pengujian soal 10 (`soal10-client-fushiguro.png`, `soal10-client-okkotsu.png`).
 
 ## Soal 5 — Short Lease, Long Lease, DNS, dan Domain Search
 
@@ -369,12 +371,13 @@ pool {
 | ino: lease 1800, DNS                       | ![ino](soal-5/images/no5-ino.png)                 |
 | miwa: lease 43200                          | ![miwa](soal-5/images/no5-miwa.png)               |
 | Lease di tengen                            | ![lease](soal-5/images/no5-tengen.png)            |
-| Option domain-search diterima client       | ![search](soal-5/images/no5-domain-search.png)    |
 
 ### Kesimpulan
 
-ino dan miwa menerima durasi lease sesuai kelasnya, beserta DNS 10.75.1.2 dan
-10.75.1.3 serta domain-search `k23.com`.
+ino menerima lease 1800 detik dan miwa 43200 detik sesuai kelasnya, beserta DNS
+10.75.1.2 dan 10.75.1.3. Option domain-search `k23.com` sudah dikonfigurasi dan
+dipaksa dikirim (option 119); bukti di sisi client akan ditambahkan setelah
+`tengen-setup.sh` versi baru dijalankan.
 
 ## Soal 6 — Fixed Address kugisaki
 
@@ -435,17 +438,12 @@ Di tengen:
 grep -E "^lease|hardware ethernet" /var/lib/dhcp/dhcpd.leases | paste - - | sort -u
 ```
 
-| Client    | Bukti                                         |
-| --------- | --------------------------------------------- |
-| itadori   | ![](soal-7/images/no7-itadori.png)            |
-| fushiguro | ![](soal-7/images/no7-fushiguro.png)          |
-| zenin     | ![](soal-7/images/no7-zenin.png)              |
-| okkotsu   | ![](soal-7/images/no7-okkotsu.png)            |
-| ino       | ![](soal-7/images/no7-ino.png)                |
-| kusakabe  | ![](soal-7/images/no7-kusakabe.png)           |
-| miwa      | ![](soal-7/images/no7-miwa.png)               |
-| kugisaki  | ![](soal-7/images/no7-kugisaki.png)           |
-| Lease di tengen | ![](soal-7/images/no7.png)              |
+IP, gateway, dan lease setiap client juga ditunjukkan pada pengujian soal 10
+(`soal10-client-<nama>.png`).
+
+| Pengujian | Bukti |
+| --- | --- |
+| Lease di tengen | ![](soal-7/images/no7.png) |
 
 ### Kesimpulan
 
@@ -477,7 +475,8 @@ pkill udhcpc; ip addr flush dev eth0; udhcpc -i eth0 -n -q
 
 | Pengujian                     | Bukti                              |
 | ----------------------------- | ---------------------------------- |
-| Capture DORA di tengen        | ![dora](soal-8/images/no8.png)     |
+| Capture DORA di tengen        | ![dora](soal-8/images/no8-1.png)   |
+| Akhir capture (4 paket)       | ![end](soal-8/images/no8-2.png)    |
 
 ### Analisis
 
@@ -517,9 +516,7 @@ udhcpc -i eth0 -n -q; ip route
 
 | Pengujian                                | Bukti                                         |
 | ---------------------------------------- | --------------------------------------------- |
-| Relay dihentikan                         | ![stop](soal-9/images/no9-stop-jichi.png)     |
 | itadori gagal mendapat lease             | ![gagal](soal-9/images/no9-1.png)             |
-| Relay dipulihkan                         | ![start](soal-9/images/no9-start-jichi.png)   |
 | itadori kembali mendapat lease           | ![pulih](soal-9/images/no9-2.png)             |
 
 ### Kesimpulan
@@ -634,8 +631,6 @@ tengen dan jichi di-restart tanpa membuka console, lalu klien meminta IP.
 | itadori mendapat IP setelah restart         | ![autostart](soal-10/images/soal10-autostart-itadori.png)  |
 | Status tengen (post-up, dhcpd, log)         | ![tengen](soal-10/images/soal10-status-tengen.png)         |
 | Status jichi (post-up, dhcrelay, NAT, log)  | ![jichi](soal-10/images/soal10-status-jichi.png)           |
-| Waktu boot di log tengen                    | ![boot tengen](soal-10/images/soal10-boot-tengen.png)      |
-| Waktu boot di log jichi                     | ![boot jichi](soal-10/images/soal10-boot-jichi.png)        |
 | Lease di tengen                             | ![lease](soal-10/images/soal10-leases.png)                 |
 
 Waktu boot dan permintaan IP:
@@ -761,9 +756,11 @@ Dari klien, `dig` ke kedua server, lalu serial dinaikkan dan dicek ulang di shok
 
 | Pengujian                          | Bukti                                                 |
 | ---------------------------------- | ----------------------------------------------------- |
-| Query ke utahime                   | ![dig utahime](soal-11/images/soal11-dig-utahime.png) |
-| Query ke shoko                     | ![dig shoko](soal-11/images/soal11-dig-shoko.png)     |
-| Serial naik, shoko ikut tersinkron | ![sync](soal-11/images/soal11-sync-serial.png)        |
+| SOA dan NS di utahime                   | ![utahime](soal-11/images/soal11-utahime-dig.png)       |
+| Salinan zona dan SOA/NS di shoko        | ![shoko](soal-11/images/soal11-shoko.png)               |
+| Serial dinaikkan di utahime             | ![sync utahime](soal-11/images/soal11-sync-utahime.png) |
+| Serial shoko ikut berubah               | ![sync shoko](soal-11/images/soal11-sync-shoko.png)     |
+| `dig` ke kedua server dari client       | ![client](soal-11/images/soal11-client-dig.png)         |
 
 ### Kesimpulan
 
@@ -829,9 +826,9 @@ menjadi slave untuk kedua zona.
 
 | Pengujian                   | Bukti                                            |
 | --------------------------- | ------------------------------------------------ |
-| `dig www.jujutsu.k23.com`   | ![cname](soal-12/images/soal12-dig-cname.png)    |
-| `dig -x 10.75.1.4`          | ![ptr](soal-12/images/soal12-dig-ptr.png)        |
-| `ping google.com` dari klien | ![ping](soal-12/images/soal12-ping-google.png)   |
+| CNAME, PTR, dan ping google.com dari client | ![client](soal-12/images/soal12-client.png)        |
+| Query di utahime (A, CNAME, PTR, forwarder) | ![utahime](soal-12/images/soal12-utahime-dig.png)  |
+| Salinan zona dan query di shoko             | ![shoko](soal-12/images/soal12-shoko-dig.png)      |
 
 ### Kesimpulan
 
@@ -1018,16 +1015,21 @@ API mengembalikan JSON berisi nama worker dan mencatat setiap request ke tabel
 
 | Pengujian                                   | Bukti                                                      |
 | ------------------------------------------- | ---------------------------------------------------------- |
-| Akses langsung klien ke worker → 403        | ![ditolak](soal-14/images/soal14-akses-langsung-ditolak.png) |
-| Akses melalui reverse proxy → berhasil      | ![proxy](soal-14/images/soal14-akses-via-proxy.png)         |
+| Akses langsung klien ke worker → 403        | ![ditolak](soal-14/images/soal14-akses-ditolak.png) |
+| maki dari lokal (hostname tampil)           | ![maki](soal-14/images/soal14-maki-lokal.png)       |
+| panda dari lokal                            | ![panda](soal-14/images/soal14-panda-lokal.png)     |
+| nanami dari lokal (API)                     | ![nanami](soal-14/images/soal14-nanami-lokal.png)   |
+| todo dari lokal (API)                       | ![todo](soal-14/images/soal14-todo-lokal.png)       |
+| kirara dari lokal (API)                     | ![kirara](soal-14/images/soal14-kirara-lokal.png)   |
 
 Pencatatan log ke database dibuktikan pada pengujian soal 13
 (`soal13-remote-access.png` dan `soal13-remote-replika.png`).
 
 ### Kesimpulan
 
-Klien yang mengakses worker secara langsung mendapat 403, sedangkan request melalui
-gojo (web) dan geto (API) dilayani normal.
+Klien yang mengakses worker secara langsung mendapat 403, sedangkan setiap worker
+melayani permintaan yang diizinkan. Akses melalui gojo (web) dan geto (API)
+dibuktikan pada pengujian soal 16.
 
 ## Soal 15 — Weighted Round Robin di geto
 
@@ -1062,8 +1064,10 @@ upstream api_cluster {
 
 | Pengujian                        | Bukti                                         |
 | -------------------------------- | --------------------------------------------- |
-| Konfigurasi geto                 | ![config](soal-15/images/soal15-config-geto.png) |
-| Loop request dan rasio respons   | ![rasio](soal-15/images/soal15-rasio-wrr.png)    |
+| Konfigurasi geto                       | ![config](soal-15/images/soal15-config.png)          |
+| 20 request dari maki: 15 nanami, 5 todo | ![rasio](soal-15/images/soal15-distribusi.png)       |
+| Urutan 8 request                       | ![urutan](soal-15/images/soal15-urutan.png)          |
+| Access log geto                        | ![log](soal-15/images/soal15-log-geto.png)           |
 
 ### Kesimpulan
 
@@ -1115,9 +1119,9 @@ server {
 
 | Pengujian                              | Bukti                                              |
 | -------------------------------------- | -------------------------------------------------- |
-| Konfigurasi gojo                       | ![config](soal-16/images/soal16-config-gojo.png)   |
-| `/` dibalas maki dan panda bergantian  | ![web](soal-16/images/soal16-web-roundrobin.png)   |
-| `/api` dibalas nanami / todo           | ![api](soal-16/images/soal16-api-routing.png)      |
+| Konfigurasi gojo                       | ![config](soal-16/images/soal16-config.png)        |
+| `/` dibalas maki dan panda bergantian  | ![web](soal-16/images/soal16-web.png)              |
+| `/api` dibalas nanami / todo           | ![api](soal-16/images/soal16-api.png)              |
 | Access log gojo                        | ![log](soal-16/images/soal16-log-gojo.png)         |
 
 ### Kesimpulan
@@ -1274,7 +1278,7 @@ upstream api_cluster {
 | Kondisi normal (nanami / todo)          | ![normal](soal-18/images/soal18-normal.png)       |
 | nginx nanami dihentikan                 | ![stop nanami](soal-18/images/soal18-stop-nanami.png) |
 | nginx todo dihentikan                   | ![stop todo](soal-18/images/soal18-stop-todo.png) |
-| Request dari klien dijawab kirara       | ![failover](soal-18/images/soal18-failover-kirara.png) |
+| Request dari klien dijawab kirara       | ![failover](soal-18/images/soal18-failover.png) |
 | nanami dan todo dinyalakan kembali      | ![pulih](soal-18/images/soal18-pulih.png)         |
 | Access log geto                         | ![log](soal-18/images/soal18-log-geto.png)        |
 
